@@ -1,7 +1,7 @@
 {
     "user_id_list": "user_id_list.txt",
-    "only_crawl_original": 0,
-    "since_date": 1,
+    "only_crawl_original": 1,
+    "since_date": 30,
     "start_page": 1,
     "write_mode": [
         "csv"
@@ -16,17 +16,9 @@
     "repost_max_download_count": 100,
     "user_id_as_folder_name": 0,
     "remove_html_tag": 1,
-    "cookie": "your cookie",
-    "mysql_config": {
-        "host": "localhost",
-        "port": 3306,
-        "user": "root",
-        "password": "123456",
-        "charset": "utf8mb4"
-    },
-    "mongodb_URI": "mongodb://[username:password@]host[:port][/[defaultauthdb][?options]]",
-    "post_config": {
-        "api_url": "https://api.example.com",
-        "api_token": ""
-    }
+    "cookie": "XSRF-TOKEN=l6CXlx0gDerQ0HTlMuHIGwQH; ALF=1731289739; SUB=_2A25KDaXaDeRhGeRL4lUY8SzJzD6IHXVpYqcSrDV8PUJbkNAbLUqmkW1NUwrclUC0iaMCMwlGb8abFkC1TMkk2x18; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WhejlbB3nXCJjhTLQSfrpfi5JpX5KzhUgL.Fozf1KM4eKzfS0z2dJLoIpjLxKnL1KBLBK2LxKBLBo.L12zLxKqL1KqLBo5t; _s_tentry=passport.weibo.com; Apache=6365329847581.376.1728697740246; SINAGLOBAL=6365329847581.376.1728697740246; ULV=1728697740260:1:1:1:6365329847581.376.1728697740246:; WBPSESS=5wEkADJRkDOSqmLx6iARJYz6jmnn1hEJ8xGlWeTMerrGJze82VSHh3rxSfbvrvsRdhgh6tAbhNz9Duu00cVZdhKlbpQT0gLPPXIfOAnfkNBEuMowqabv6pALRfmfTHtO67mMCFjIieQQqNZW_VS1mA==",
+    "proxies" : {
+    "http": "http://10.0.108.19:3128",
+    "https": "http://10.0.108.19:3128"
+}
 }

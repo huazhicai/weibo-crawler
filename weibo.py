@@ -133,6 +133,13 @@ class Weibo(object):
         self.weibo_id_list = []  # 存储爬取到的所有微博id
         self.long_sleep_count_before_each_user = 0 #每个用户前的长时间sleep避免被ban
 
+        self._session = self.get_session_with_proxy(config)
+
+    def get_session_with_proxy(self, config):
+        session = requests.Session()
+        session.proxies.update(config.get("proxies", {}))
+        return session
+
     def validate_config(self, config):
         """验证配置是否正确"""
 
@@ -227,7 +234,7 @@ class Weibo(object):
     def get_json(self, params):
         """获取网页中json数据"""
         url = "https://m.weibo.cn/api/container/getIndex?"
-        r = requests.get(url, params=params, headers=self.headers, verify=False)
+        r = self._session.get(url, params=params, headers=self.headers, verify=False)
         return r.json(), r.status_code
 
     def get_weibo_json(self, page):
@@ -432,7 +439,7 @@ class Weibo(object):
         for i in range(5):
             url = "https://m.weibo.cn/detail/%s" % id
             logger.info(f"""URL: {url} """)
-            html = requests.get(url, headers=self.headers, verify=False).text
+            html = self._session.get(url, headers=self.headers, verify=False).text
             html = html[html.find('"status":') :]
             html = html[: html.rfind('"call"')]
             html = html[: html.rfind(",")]
@@ -506,13 +513,13 @@ class Weibo(object):
             if not need_download:
                 return 
 
-            s = requests.Session()
-            s.mount(url, HTTPAdapter(max_retries=5))
+            # s = requests.Session()
+            self._session.mount(url, HTTPAdapter(max_retries=5))
             try_count = 0
             success = False
             MAX_TRY_COUNT = 3
             while try_count < MAX_TRY_COUNT:
-                downloaded = s.get(
+                downloaded = self._session.get(
                     url, headers=self.headers, timeout=(5, 10), verify=False
                 )
                 try_count += 1
@@ -932,7 +939,7 @@ class Weibo(object):
         if max_id:
             params["max_id"] = max_id
         url = "https://m.weibo.cn/comments/hotflow?max_id_type=0"
-        req = requests.get(
+        req = self._session.get(
             url,
             params=params,
             headers=self.headers,
@@ -996,7 +1003,7 @@ class Weibo(object):
         url = "https://m.weibo.cn/api/comments/show?id={id}&page={page}".format(
             id=id, page=page
         )
-        req = requests.get(url)
+        req = self._session.get(url)
         json = None
         try:
             json = req.json()
@@ -1049,7 +1056,7 @@ class Weibo(object):
         id = weibo["id"]
         url = "https://m.weibo.cn/api/statuses/repostTimeline"
         params = {"id": id, "page": page}
-        req = requests.get(
+        req = self._session.get(
             url,
             params=params,
             headers=self.headers,
@@ -1414,7 +1421,7 @@ class Weibo(object):
         }
         for attempt in range(max_retries + 1):
             try:
-                response = requests.post(url, json=data, headers=headers)
+                response = self._session.post(url, json=data, headers=headers)
                 if response.status_code == requests.codes.ok:
                     return response.json()
                 else:
